@@ -18,16 +18,9 @@ pip install -r requirements.txt
 > Como pegar o `TOKEN` ?
 > 
 
-Click nesse manolo -> [@BotFather](https://telegram.me/botfather) <- para incicar o chat com o Bot gerenciador de Bots. <3
+Click nesse link [@BotFather](https://telegram.me/botfather) para incicar o chat com o Bot gerenciador de Bots. <3
 
-![@BotFather](http://i.imgur.com/vYqkBH2.png)
-
-Bom como você deve ter percebido ele é auto-explicativo, entao vamos criar nosso bot.
-
-Após executar o comando `/newbot` siga suas instruções:
-
-![Escolhendo o nome do bot](http://i.imgur.com/tcTfVqo.png)
-
+Executar o comando `/newbot`
 
 > 
 > Como pegar o `CHAT_ID` ?
