@@ -1,43 +1,25 @@
-import pytesseract as ocr
-import numpy as np
-import pytesseract
-import cv2
-import os
+from google.cloud import vision
+import io
 
-from PIL import Image
+def detect_text(path):
+    """Detects text in the file."""
+    client = vision.ImageAnnotatorClient()
 
-def covert_image_to_text(image):
-    print(image)
-    pytesseract.pytesseract.tesseract_cmd = r'{}'.format(os.environ['TESSERACT_PATH'])
+    with io.open(path, 'rb') as image_file:
+        content = image_file.read()
 
-    '''# chamada ao tesseract OCR por meio de seu wrapper
-    phrase = ocr.image_to_string(Image.open(image))
-    print(phrase)
-    return phrase'''
+    image = vision.Image(content=content)
 
-    # tipando a leitura para os canais de ordem RGB
-    imagem = Image.open(image).convert('RGB')
+    response = client.text_detection(image=image)
+    texts = response.text_annotations
 
-    # convertendo em um array editável de numpy[x, y, CANALS]
-    npimagem = np.asarray(imagem).astype(np.uint8)  
-
-    # diminuição dos ruidos antes da binarização
-    npimagem[:, :, 0] = 0 # zerando o canal R (RED)
-    npimagem[:, :, 2] = 0 # zerando o canal B (BLUE)
-
-    # atribuição em escala de cinza
-    im = cv2.cvtColor(npimagem, cv2.COLOR_RGB2GRAY) 
-
-    # aplicação da truncagem binária para a intensidade
-    # pixels de intensidade de cor abaixo de 127 serão convertidos para 0 (PRETO)
-    # pixels de intensidade de cor acima de 127 serão convertidos para 255 (BRANCO)
-    # A atrubição do THRESH_OTSU incrementa uma análise inteligente dos nivels de truncagem
-    ret, thresh = cv2.threshold(im, 127, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU) 
-
-    # reconvertendo o retorno do threshold em um objeto do tipo PIL.Image
-    binimagem = Image.fromarray(thresh) 
-
-    # chamada ao tesseract OCR por meio de seu wrapper
-    phrase = ocr.image_to_string(binimagem)
-
-    return phrase
+    content = ""
+    list_text = []
+    for text in texts:
+        content += '{}'.format(text.description)
+        list_text.append('{}'.format(text.description))
+    
+    return content, list_text
+    
+    if response.error.message:
+        return response.error.message

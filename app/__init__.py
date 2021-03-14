@@ -27,7 +27,7 @@ def send_photo(update: Update, _: CallbackContext):
     newFile.download(filename)
 
     try:
-        ocr_text = ocr.covert_image_to_text(filename)    
+        ocr_text, ocr_list = ocr.detect_text(filename)    
         update.message.reply_text(str(ocr_text))
     except:
         update.message.reply_text('Desculpe! Eu não consigo converter essa imagem em texto')
