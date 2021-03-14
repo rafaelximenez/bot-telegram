@@ -23,6 +23,7 @@ def send_photo(update: Update, _: CallbackContext):
     bot = Bot(token=os.environ['TELEGRAM_TOKEN'])
     file_id = update.message.photo[-1].file_id
     newFile = bot.getFile(file_id)
+    
     filename = 'tmp/{}.jpg'.format(file_id[0:8])
     newFile.download(filename)
 

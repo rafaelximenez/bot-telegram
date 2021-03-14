@@ -31,4 +31,13 @@ https://api.telegram.org/bot<TOKEN>/getUpdates
 
 ```
 
+> 
+> Setar variáveis ambiente para:
+> 
+
+```
+TELEGRAM_TOKEN
+TELEGRAM_CHAT_ID
+GOOGLE_APPLICATION_CREDENTIALS
+```
 
