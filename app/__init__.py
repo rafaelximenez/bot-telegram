@@ -12,13 +12,6 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-
-def start(update: Update, _: CallbackContext) -> None:
-    update.message.reply_text('Olá! Como vai?')
-
-def echo(update: Update, _: CallbackContext) -> None:
-    update.message.reply_text(update.message.text)
-
 def send_photo(update: Update, _: CallbackContext):
     bot = Bot(token=os.environ['TELEGRAM_TOKEN'])
     file_id = update.message.photo[-1].file_id
@@ -37,9 +30,6 @@ def main() -> None:
     updater = Updater(os.environ['TELEGRAM_TOKEN'])
 
     dispatcher = updater.dispatcher
-
-    dispatcher.add_handler(CommandHandler("start", start))
-    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
     dispatcher.add_handler(MessageHandler(Filters.photo, send_photo))
 
     updater.start_polling()

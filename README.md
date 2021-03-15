@@ -32,6 +32,16 @@ https://api.telegram.org/bot<TOKEN>/getUpdates
 ```
 
 > 
+> Como baixar a chave da `Conta de serviço` no Google ?
+> 
+
+```
+Acesse a documentação:
+https://cloud.google.com/vision/docs/before-you-begin
+
+```
+
+> 
 > Setar variáveis ambiente para:
 > 
 
