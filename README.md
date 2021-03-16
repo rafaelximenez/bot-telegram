@@ -51,3 +51,6 @@ TELEGRAM_CHAT_ID
 GOOGLE_APPLICATION_CREDENTIALS
 ```
 
+## Funcionalidades:
+- Converter imagem em texto
+- Gerar QRCode de um url

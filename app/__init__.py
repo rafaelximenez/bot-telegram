@@ -1,5 +1,7 @@
 import os
+import re
 import logging
+import qrcode
 
 from .helpers import ocr
 from telegram import Update
@@ -26,11 +28,20 @@ def send_photo(update: Update, _: CallbackContext):
     except:
         update.message.reply_text('Desculpe! Eu não consigo converter essa imagem em texto')
 
+def generate_qr(update: Update, _: CallbackContext):
+    if re.search('http', update.message.text):
+        img = qrcode.make(update.message.text)
+        filename = 'tmp/qr/image.jpg'
+        img.save(filename)
+        update.message.reply_photo(photo=open(filename, 'rb'))
+    pass
+
 def main() -> None:
     updater = Updater(os.environ['TELEGRAM_TOKEN'])
 
     dispatcher = updater.dispatcher
     dispatcher.add_handler(MessageHandler(Filters.photo, send_photo))
+    dispatcher.add_handler(MessageHandler(Filters.text, generate_qr))
 
     updater.start_polling()
 
