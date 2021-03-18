@@ -4,6 +4,7 @@ import logging
 import qrcode
 
 from .helpers import ocr
+from .helpers import sentiment_analysis
 from telegram import Update
 from telegram.bot import Bot
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
@@ -36,12 +37,29 @@ def generate_qr(update: Update, _: CallbackContext):
         update.message.reply_photo(photo=open(filename, 'rb'))
     pass
 
+def analysis_sentiment(update: Update, _: CallbackContext):
+    score, magnitude = sentiment_analysis.analyze_feeling(update.message.text)
+    
+    '''
+    Claramente positivo*	"score": 0.8, "magnitude": 3.0
+    Claramente negativo*	"score": -0.6, "magnitude": 4.0
+    Neutro	"score": 0.1, "magnitude": 0.0
+    Misto	"score": 0.0, "magnitude": 4.0
+    '''
+    if score >= 0.4 and score <= 1:
+        update.message.reply_text('Sentimento positivo!')
+    elif score >= -0.3 and score <= 0.3:
+        update.message.reply_text('Sentimento neutro!')
+    elif score >= -1 and score <= -0.4:
+        update.message.reply_text('Sentimento negativo!')
+
 def main() -> None:
     updater = Updater(os.environ['TELEGRAM_TOKEN'])
-
+    
     dispatcher = updater.dispatcher
     dispatcher.add_handler(MessageHandler(Filters.photo, send_photo))
-    dispatcher.add_handler(MessageHandler(Filters.text, generate_qr))
+    #dispatcher.add_handler(MessageHandler(Filters.text, generate_qr))
+    dispatcher.add_handler(MessageHandler(Filters.text, analysis_sentiment))
 
     updater.start_polling()
 
