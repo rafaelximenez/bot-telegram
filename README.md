@@ -1,4 +1,4 @@
-# JAST - Apena um Telegram inteligènte
+# Bot Telegram
 
 Consulte a documentação para criar seu bot através do botfather 
 <br />
@@ -54,3 +54,4 @@ GOOGLE_APPLICATION_CREDENTIALS
 ## Funcionalidades:
 - Converter imagem em texto
 - Gerar QRCode de um url
+- Analisar sentimento
