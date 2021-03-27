@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 import logging
 import qrcode
 
@@ -17,8 +18,11 @@ logger = logging.getLogger(__name__)
 
 SENTIMENT, QR = range(2)
 
+mode = os.getenv("MODE")
+TOKEN = os.getenv("TELEGRAM_TOKEN")
+
 def send_photo(update: Update, _: CallbackContext):
-    bot = Bot(token=os.environ['TELEGRAM_TOKEN'])
+    bot = Bot(token=TOKEN)
     file_id = update.message.photo[-1].file_id
     newFile = bot.getFile(file_id)
     
@@ -73,10 +77,10 @@ def analysis_sentiment(update: Update, _: CallbackContext):
     return ConversationHandler.END
 
 def main() -> None:
-    updater = Updater(os.environ['TELEGRAM_TOKEN'])
+    updater = Updater(TOKEN)
     
     dispatcher = updater.dispatcher
-    
+
     conv_qr = ConversationHandler(
         entry_points=[CommandHandler("qr", listen_qr)],
         states={
@@ -97,7 +101,17 @@ def main() -> None:
     dispatcher.add_handler(conv_sentiment)
 
     dispatcher.add_handler(MessageHandler(Filters.photo, send_photo))
-
-    updater.start_polling()
-
-    updater.idle()
+    
+    if mode == "DEV":
+        updater.start_polling()
+        updater.idle()
+    elif mode == "PROD":
+        PORT = int(os.environ.get("PORT", "8443"))
+        HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME")
+        updater.start_webhook(listen="0.0.0.0",
+                              port=PORT,
+                              url_path=TOKEN)
+        updater.bot.set_webhook("https://{}.herokuapp.com/{}".format(HEROKU_APP_NAME, TOKEN))
+    else:
+        logger.error("No MODE specified!")
+        sys.exit(1)
