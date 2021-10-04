@@ -1,14 +1,15 @@
-import os
-import re
-import sys
+from telegram.ext import Updater, CommandHandler, MessageHandler, ConversationHandler, Filters, CallbackContext
+from telegram.bot import Bot
+from telegram import Update
+
+from app.services.sentiment_analysis import GNlp
+from app.services.ocr import GVision
+
 import logging
 import qrcode
-
-from .services.ocr import GVision
-from .services.sentiment_analysis import GNlp
-from telegram import Update, ReplyKeyboardMarkup
-from telegram.bot import Bot
-from telegram.ext import Updater, CommandHandler, MessageHandler, ConversationHandler, Filters, CallbackContext
+import sys
+import re
+import os
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
