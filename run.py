@@ -1,4 +1,5 @@
-from app import main
+from app.engine import *
 
 if __name__ == '__main__':
-    main()
+    telegram = Telegram()
+    telegram.main()
