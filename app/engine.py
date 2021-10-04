@@ -33,7 +33,7 @@ class Telegram:
         file_id = update.message.photo[-1].file_id
         newFile = self.bot.getFile(file_id)
         
-        filename = 'tmp/{}.jpg'.format(file_id[0:8])
+        filename = f'{os.getcwd()}/tmp/{file_id[0:8]}.jpg'
         newFile.download(filename)
 
         try:
@@ -56,7 +56,7 @@ class Telegram:
     def generate_qr(self, update: Update, context: CallbackContext):
         if re.search('http', update.message.text):
             img = qrcode.make(update.message.text)
-            filename = 'tmp/qr/image.jpg'
+            filename = f'{os.getcwd()}/tmp/qr/image.jpg'
             img.save(filename)
             update.message.reply_photo(photo=open(filename, 'rb'))
         return ConversationHandler.END
