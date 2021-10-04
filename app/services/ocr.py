@@ -15,17 +15,11 @@ class GVision:
 
         content = ""
         list_text = []
-        print(texts)
+
         for text in texts:
             content += '{}'.format(text.description)
             list_text.append('{}'.format(text.description))
-        print()
-        print()
-        print(content)
-        print()
-        print(list_text)
-        print()
-        print()
+
         return content, list_text
         
         if response.error.message:
