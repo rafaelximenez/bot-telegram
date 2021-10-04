@@ -15,7 +15,8 @@ class GVision:
 
         content = ""
         list_text = []
-        for text in texts.pop():
+        print(texts)
+        for text in texts:
             content += '{}'.format(text.description)
             list_text.append('{}'.format(text.description))
         
